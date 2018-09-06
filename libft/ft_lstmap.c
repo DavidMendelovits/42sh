@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/06 07:19:09 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/06 15:31:20 by dmendelo         ###   ########.fr       */
+/*   Created: 2018/04/23 21:13:36 by dmendelo          #+#    #+#             */
+/*   Updated: 2018/04/24 16:10:52 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft/libft.h"
+#include "libft.h"
 
-void		parse(char *stream);
-char		*primary_parse(char *stream);
-void		print_words(char **words);
-char		**parse_strsplit(char *stream);
-int			parse_word_count(char *stream);
-int			skip_delim(char *stream, int stream_ptr);
-int			is_delim(char c);
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
+{
+	t_list	*new;
+
+	if (lst)
+	{
+		new = f(lst);
+		new->next = ft_lstmap(lst->next, f);
+		return (new);
+	}
+	return (NULL);
+}

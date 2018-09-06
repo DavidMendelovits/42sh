@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   ft_strjoinch.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/06 07:19:09 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/06 15:31:20 by dmendelo         ###   ########.fr       */
+/*   Created: 2018/06/24 21:20:51 by dmendelo          #+#    #+#             */
+/*   Updated: 2018/07/16 20:09:09 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft/libft.h"
+#include "libft.h"
 
-void		parse(char *stream);
-char		*primary_parse(char *stream);
-void		print_words(char **words);
-char		**parse_strsplit(char *stream);
-int			parse_word_count(char *stream);
-int			skip_delim(char *stream, int stream_ptr);
-int			is_delim(char c);
+char	*ft_strjoinch(char const *s1, char c)
+{
+	char	*ret;
+	size_t	i;
+	size_t	s1_length;
+
+	if (!s1 || !c)
+		return (NULL);
+	s1_length = ft_strlen(s1);
+	if (!(ret = ft_strnew(s1_length + 1)))
+		return (NULL);
+	i = -1;
+	while (++i < s1_length)
+		*(ret + i) = *(s1 + i);
+	*(ret + i) = c;
+	return (ret);
+}

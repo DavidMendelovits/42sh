@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/06 07:19:09 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/06 15:31:20 by dmendelo         ###   ########.fr       */
+/*   Created: 2018/04/23 20:12:05 by dmendelo          #+#    #+#             */
+/*   Updated: 2018/04/23 21:55:40 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft/libft.h"
+#include "libft.h"
 
-void		parse(char *stream);
-char		*primary_parse(char *stream);
-void		print_words(char **words);
-char		**parse_strsplit(char *stream);
-int			parse_word_count(char *stream);
-int			skip_delim(char *stream, int stream_ptr);
-int			is_delim(char c);
+t_list	*ft_lstnew(void const *content, size_t content_size)
+{
+	t_list	*list;
+
+	if (!(list = (t_list*)ft_memalloc(sizeof(t_list))))
+		return (NULL);
+	if (!content)
+	{
+		list->content = NULL;
+		list->content_size = 0;
+	}
+	else
+	{
+		if ((list->content = ft_dup(content, content_size)) == NULL)
+			return (NULL);
+		list->content_size = content_size;
+	}
+	list->next = NULL;
+	return (list);
+}

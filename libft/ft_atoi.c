@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/06 07:19:09 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/06 15:31:20 by dmendelo         ###   ########.fr       */
+/*   Created: 2018/04/16 16:28:06 by dmendelo          #+#    #+#             */
+/*   Updated: 2018/04/23 17:44:22 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft/libft.h"
+#include "libft.h"
 
-void		parse(char *stream);
-char		*primary_parse(char *stream);
-void		print_words(char **words);
-char		**parse_strsplit(char *stream);
-int			parse_word_count(char *stream);
-int			skip_delim(char *stream, int stream_ptr);
-int			is_delim(char c);
+int		ft_atoi(const char *str)
+{
+	int		res;
+	int		neg;
+
+	neg = 1;
+	res = 0;
+	while (*str && (*str == ' ' || *str == '\n' || *str == '\t' ||
+				*str == '\v' || *str == '\f' || *str == '\r'))
+		str++;
+	if (*str == '-')
+		neg = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	while (*str && *str >= '0' && *str <= '9')
+	{
+		res = res * 10 + (*str - 48);
+		str++;
+	}
+	return (res * neg);
+}

@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/06 07:19:09 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/06 15:31:20 by dmendelo         ###   ########.fr       */
+/*   Created: 2018/04/18 10:24:03 by dmendelo          #+#    #+#             */
+/*   Updated: 2018/04/18 10:43:23 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft/libft.h"
+#include "libft.h"
 
-void		parse(char *stream);
-char		*primary_parse(char *stream);
-void		print_words(char **words);
-char		**parse_strsplit(char *stream);
-int			parse_word_count(char *stream);
-int			skip_delim(char *stream, int stream_ptr);
-int			is_delim(char c);
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+{
+	unsigned int	i;
+
+	if (s && *s && f)
+	{
+		i = 0;
+		while (s[i])
+		{
+			f(i, &s[i]);
+			i++;
+		}
+	}
+}

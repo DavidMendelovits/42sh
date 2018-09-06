@@ -6,11 +6,11 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/06 07:16:05 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/06 07:22:08 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/06 12:56:27 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "parse.h"
 
 int			main(int argc, char **argv)
 {

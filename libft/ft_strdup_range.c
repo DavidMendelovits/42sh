@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   ft_strdup_range.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/06 07:19:09 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/06 15:31:20 by dmendelo         ###   ########.fr       */
+/*   Created: 2018/09/06 12:28:46 by dmendelo          #+#    #+#             */
+/*   Updated: 2018/09/06 12:30:27 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft/libft.h"
+#include "libft.h"
 
-void		parse(char *stream);
-char		*primary_parse(char *stream);
-void		print_words(char **words);
-char		**parse_strsplit(char *stream);
-int			parse_word_count(char *stream);
-int			skip_delim(char *stream, int stream_ptr);
-int			is_delim(char c);
+char		*ft_strdup_range(char *str, int begin, int end)
+{
+	int			i;
+	char		*duplicate;
+	int			duplicate_ptr;
+	int			range;
+
+	range = end - begin + 1;
+	i = begin;
+	duplicate = malloc(sizeof(char) * (range + 1));
+	duplicate_ptr = 0;
+	while (i <= end)
+	{
+		duplicate[duplicate_ptr] = str[i];
+		i += 1;
+		duplicate_ptr += 1;
+	}
+	duplicate[duplicate_ptr] = '\0';
+	return (duplicate);
+}
