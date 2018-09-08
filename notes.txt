@@ -1,0 +1,33 @@
+How shell works?
+
+->the shell reads input from a file (?)
+->the shell breaks the input into tokens (words, operators) -> after primary parser
+->the shell parses input into simple commands and compound commands
+->shell performs various expansions (separately?) on different pards of each command, resulting in a list of different pathnames and fields to be treated as a command and arguments (think about how the shell will interpret arguments like '.' or ../)
+->shell performs redirections and removes redirection operators and their operands from the parameter list (how will we list all our commands and arguments?)
+->shell will execute a function, built-in, executable file, or script, giving the names of the arguments as positional parameters labeled 1-n, while the name of the commands (or the name of the script) as the positional parameter numbered 0. (in what order?)
+->shell optionally waits for the comand to complete and collects the exit status.
+
+How Quoting works?
+
+->quoting is used to remove the special meaning of certain chars or words to the shell. (??).
+->the shell should quote the folowing characters if they are to repreent themselves
+    | & : < > (  ) $ ` \ " ' <space> <tab> <newline>
+->special cases in primary parser for the above characters?
+->the followed MAY need to be quotes under some circumstances. (these charaacters may be special depending on conditions described elsewhere in the page I'm stealing all this info from)
+
+Escape Character (Backslah) -> how and what do
+
+->A backslash that isn't quoted shall preserve the literal value of the following character, with the exception of <newline>. if a <newline> ('\n') follows a backslash, the shell should interpret this as a line continuation. The backslash and <newline> should be removed before splitting the input into tokens. Since the escaped <newline> is removed entirely from the input and is not replaced by any white space, it cannot serve as a token seperator.
+
+Single quotes (' ')
+
+->Characters within single quotes preserve their value. A single quote cannot occur within single-quotes. (error check?)
+
+Double quotes (" ")
+
+->Enclosing characters in double quotes should presere the literal value of all characters within except for the following: \ ` (backquote) $
+->The dollar sign shall retain its special meaning introducing parameter expansion, a form of command substitution (see command substitution), and arithmetic expansion (see another sectipns of notes?)
+->the input characters within the double-quoted string that are enclosed between "$(" and the matching ')' ("$(in here)") shall not be affected by the double-quotes, but rather will define that command whose output replaced the "$(...)"when the word is expanding. the tokenizing rules, not including alias substitutions (another thing we need to parse for), shall be applied RECURSIVELY to find the matching ')' (or maybe with a stack?)
+->within the string of characters between an enclosed "${" and the matching "}", an even number of unescaped double-quotes or single quotes (if any) will occur. A preceding backslash character (\) should be used to escape a literal { or }. (see parameter expansion to determine the matching '}')
+
