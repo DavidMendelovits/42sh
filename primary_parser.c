@@ -6,13 +6,43 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/06 07:15:04 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/08 09:03:45 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/08 15:37:48 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
-int				parse_word_count(char *stream)
+/*
+
+			while (stream[sp] && stream[sp - 1])
+			{
+				sp += 1;
+				if (is_quote(stream[sp]))
+				{
+					count += 1;			
+				}
+
+			}
+			if (!stream[sp])
+				printf("error. Missing end-quote\n");
+*/
+
+int				find_end_quote(char *stream, int *ptr)
+{
+	*ptr += 1;
+	while (stream[*ptr])
+	{
+		if (is_quote(stream[*ptr]))
+		{
+			*ptr += 1;
+			return (1);
+		}
+		*ptr += 1;
+	}
+	return (0);
+}
+
+int				parse_arg_count(char *stream)
 {
 	int			sp;
 	int			count;
@@ -20,13 +50,21 @@ int				parse_word_count(char *stream)
 	sp = 0;
 	while (stream[sp])
 	{
-		if (is_delim(stream[sp]))
+		if (is_quote(stream[sp]))
+		{
+			if (find_end_quote(stream, &sp))
+				count += 1;
+			else
+			{
+				printf("\n\nError. Missing end quote\n");
+				return (0);
+			}
+		}
+		else if (is_delim(stream[sp]))
 		{
 			sp = skip_delim(stream, sp);
-		}
-		if (!stream[sp])
-		{
-			return (count);
+			if (!stream[sp])
+				return (count);
 		}
 		else
 		{
@@ -39,7 +77,7 @@ int				parse_word_count(char *stream)
 	}
 	return (count);
 }
-
+/*
 char			**parse_seperate_quotes(char **_stream)
 {
 	int				_stream_ptr;
@@ -48,6 +86,29 @@ char			**parse_seperate_quotes(char **_stream)
 
 	return (_stream);
 }
+*/
+
+int				dup_quote_contents(int ptr, char *stream, t_strsplit *split)
+{
+	int			begin;
+	char		quote;
+
+	begin = ptr;
+	quote = stream[ptr];
+	ptr += 1;
+	while (stream[ptr])
+	{
+		if (stream[ptr] == quote)
+		{
+			split->strings[split->ptr] = ft_strdup_range(stream, begin, ptr);
+			printf("function->dup_quote_contents: %s\n", split->strings[split->ptr]);
+			split->ptr += 1;
+			return (ptr + 1);
+		}
+		ptr += 1;
+	}
+	return (ptr);
+}
 
 char			**parse_strsplit(char *stream)
 {
@@ -55,8 +116,9 @@ char			**parse_strsplit(char *stream)
 	int				begin;
 	t_strsplit		split;
 
-	split.word_count = parse_word_count(stream);
-	
+	split.word_count = parse_arg_count(stream);
+	if (!split.word_count)
+		return (NULL);
 	printf("word_count = %d\n", split.word_count);
 	
 	split.strings = malloc(sizeof(split.strings) * (split.word_count + 1));
@@ -70,10 +132,10 @@ char			**parse_strsplit(char *stream)
 		{
 			sp = dup_quote_contents(sp, stream, &split);
 		}
-		else if (is_special_char(stream[sp]))
-		{
+//		else if (is_special_char(stream[sp]))
+//		{
 
-		}
+//		}
 		else if (!is_delim(stream[sp]))
 		{
 			begin = sp;
@@ -133,6 +195,7 @@ char		*primary_parse(char *stream)
 //	char		*condensed_stream;
 	
 	strings = parse_strsplit(stream);
+	assert(strings);
 	print_words(strings);
 //	condensed_stream = condense_stream(strings);
 //	free_2d_ptr(strings);
