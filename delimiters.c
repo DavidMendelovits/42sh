@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/08 07:45:05 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/08 14:46:07 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/12 15:26:30 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,42 @@ int				is_quote(char c)
 	return (0);
 }
 
-int				is_special_char(char c)
+int				is_redirection(char c)
 {
-	if (c == '!' || c == '{' || c == '}' || c == '"' || c == '\'' ||
-		c == ';' || c == '|' || c == '&' || c == '$' || c == '`' ||
-		c == ')' || c == ')' || c == '[' || c == ']' )
+	if (c == '>' || c == '<' || c == '|' || c == '&')
+	{
+		return (1);
+	}
+	return (0);
+
+}
+
+int				is_expansion_char(char c)
+{
+	if (c == '$' || c == '*'
+}
+
+int			is_special_char(char c)
+{
+	if (c == '!' || c == '"' || c == '\'' || c == ';' || c == '`')
+	{
+		return (1);
+	}
+	return (0);
+}
+
+int				is_start_bracket(char c)
+{
+	if (c == '(' || c == '[' || c == '{') 
+	{
+		return (1);
+	}
+	return (0);
+}
+
+int				is_end_bracket(char c)
+{
+	if (c == ')' || c == ']' || c == '}')
 	{
 		return (1);
 	}

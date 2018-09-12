@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/06 07:15:04 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/08 15:37:48 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/12 14:00:21 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,10 +132,14 @@ char			**parse_strsplit(char *stream)
 		{
 			sp = dup_quote_contents(sp, stream, &split);
 		}
-//		else if (is_special_char(stream[sp]))
-//		{
-
-//		}
+		if (is_start_bracket)
+		{
+			sp = dup_bracket_contents(sp, stream, &split);
+		}
+		else if (is_special_char(stream[sp]))
+		{
+			sp = dup_special_case(sp, stream, &split);
+		}
 		else if (!is_delim(stream[sp]))
 		{
 			begin = sp;
@@ -189,7 +193,7 @@ char		*condense_stream(char **strings)
 	}
 }
 */
-char		*primary_parse(char *stream)
+char		**split_parse(char *stream)
 {
 	char		**strings;
 //	char		*condensed_stream;
