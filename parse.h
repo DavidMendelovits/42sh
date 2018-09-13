@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/06 07:19:09 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/12 15:15:18 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/13 04:25:30 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <unistd.h>
 #include <assert.h>
 #include "libft/libft.h"
+
+# define SEPARATOR ';'
 
 typedef struct		s_strsplit
 {

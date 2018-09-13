@@ -6,26 +6,11 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/06 07:15:04 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/12 14:00:21 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/13 05:21:35 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
-
-/*
-
-			while (stream[sp] && stream[sp - 1])
-			{
-				sp += 1;
-				if (is_quote(stream[sp]))
-				{
-					count += 1;			
-				}
-
-			}
-			if (!stream[sp])
-				printf("error. Missing end-quote\n");
-*/
 
 int				find_end_quote(char *stream, int *ptr)
 {
@@ -110,6 +95,47 @@ int				dup_quote_contents(int ptr, char *stream, t_strsplit *split)
 	return (ptr);
 }
 
+int				dup_redirection(int ptr, char *stream, t_strplit *split)
+{
+	if (stream[ptr] == '>' && stream[ptr + 1] == '>')
+	{
+		split->strings[split->ptr] = ft_strdup_range(stream, ptr, ptr + 1);
+		ptr += 1;
+	}
+	else if (stream[ptr] == '>')
+	{
+		split->strings[split->ptr] = ft_strdup_range(stream, ptr, ptr);
+	}
+	else if (stream[ptr] == '<')
+	{
+		split->strings[split->ptr] = ft_strdup_range(stream, ptr, ptr);
+	}
+	else if (stream[ptr] == '|' && stream[ptr + 1] != '|')
+	{
+		split->strings[split->ptr] = ft_strdup_range(stream, ptr, ptr);
+	}
+	printf("\nfunction->dup_redirection\n");
+	printf("strings[%d] = %s\n", split->ptr, split->strings[split->ptr]);
+	split->ptr += 1;
+	return (ptr + 1);
+}
+
+int				dup_logical_operator(int ptr, char *stream, t_strsplit *split)
+{
+	if (stream[ptr] == '&' && stream[ptr + 1] == '&')
+	{
+		split->strings[split->ptr] = ft_strdup_range(stream, ptr, ptr + 1);
+	}
+	else if (stream[ptr] == '|' && stream[ptr + 1] == '|')
+	{
+		split->strings[split->ptr] = ft_strdup_range(stream, ptr, ptr + 1);
+	}
+	printf("\nfunction->dup_logical_operator\n");
+	printf("strings[%d] = %s\n", split->ptr, split->strings[split->ptr]);
+	split->ptr += 1;
+	return (ptr + 2);
+}
+
 char			**parse_strsplit(char *stream)
 {
 	int				sp;
@@ -132,13 +158,21 @@ char			**parse_strsplit(char *stream)
 		{
 			sp = dup_quote_contents(sp, stream, &split);
 		}
-		if (is_start_bracket)
+		else if (is_redirection(stream[sp]))
 		{
-			sp = dup_bracket_contents(sp, stream, &split);
+			sp = dup_redirection(sp, stream, &split);
 		}
-		else if (is_special_char(stream[sp]))
+		else if (is_logical_operator(stream[sp], stream[sp + 1]))
 		{
-			sp = dup_special_case(sp, stream, &split);
+			sp = dup_logical_operator(sp, stream, &split);
+		}
+		else if (is_glob(stream, sp))
+		{
+			sp = dup_glob(sp, stream, &split);
+		}
+		else if (stream[sp] == ';')
+		{
+			sp = dup_seperator(sp, stream, &split);
 		}
 		else if (!is_delim(stream[sp]))
 		{
@@ -161,47 +195,12 @@ char			**parse_strsplit(char *stream)
 	return (split.strings);
 }
 
-/*
-char		*strjoin_space(char *stream, char **strings, int ptr)
-{
-
-}
-*/
-
-/*
-void		free_append(char **stream, char **strings, int ptr)
-{
-	char	*tmp;
-
-
-	tmp = ft_memalloc(ft_strlen(*stream) + ft_strlen(strings[ptr]) + 2);
-	tmp = strjoin_space(*stream, strings, ptr);
-}
-*/
-
-/*
-char		*condense_stream(char **strings)
-{
-	int			strings_ptr;
-	char		*condensed_stream;
-
-	condensed_stream = ft_strdup(strings[0]);
-	strings_ptr = 1;
-	while (strings[strings_ptr])
-	{
-		free_append(&condensed_stream, strings, strings_ptr);
-	}
-}
-*/
 char		**split_parse(char *stream)
 {
 	char		**strings;
-//	char		*condensed_stream;
 	
 	strings = parse_strsplit(stream);
 	assert(strings);
 	print_words(strings);
-//	condensed_stream = condense_stream(strings);
-//	free_2d_ptr(strings);
 	return (stream);
 }

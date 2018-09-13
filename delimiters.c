@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/08 07:45:05 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/12 15:26:30 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/13 05:53:44 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ int				is_quote(char c)
 	return (0);
 }
 
-int				is_redirection(char c)
+int				is_redirection(char c1, char c2)
 {
-	if (c == '>' || c == '<' || c == '|' || c == '&')
+	if (c1 == '>' || c1 == '<' || (c1 == '|' && c2 != '|') ||
+		   	(c1 == '>' && c2 == '>'))
 	{
 		return (1);
 	}
@@ -40,14 +41,27 @@ int				is_redirection(char c)
 
 }
 
+int				is_logical_operator(char c1, char c2)
+{
+	if ((c1 == '&' && c2 == '&') || (c1 == '|' && c2 == '|'))
+	{
+		return (1);
+	}
+	return (0);
+}
+
 int				is_expansion_char(char c)
 {
-	if (c == '$' || c == '*'
+	if (c == '$' || c == '*')
+	{
+		return (1);
+	}
+	return (0);
 }
 
 int			is_special_char(char c)
 {
-	if (c == '!' || c == '"' || c == '\'' || c == ';' || c == '`')
+	if (c == '!' || c == '`')
 	{
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 13:37:55 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/12 15:26:34 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/13 05:53:50 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ int				extract_token(char **input, int *ptr, t_tokens **tokens)
 
 void			init_tokens(t_tokens **tokens)
 {
-	(*tokens)->_and = ft_strdup("0");
-	(*tokens)->_or = ft_strdup("0");
-	(*tokens)->_pipe = ft_strdup("0");
-	(*tokens)->_command = ft_strdup("0");
-	(*tokens)->_arguments = ft_strdup("0");
-	(*tokens)->_expansions = ft_strdup("0");
+	(*tokens)->_and = NULL;
+	(*tokens)->_or = NULL;
+	(*tokens)->_pipe = NULL;
+	(*tokens)->_command = NULL;
+	(*tokens)->_arguments = NULL;
+	(*tokens)->_expansions = NULL;
 }
 
 t_tokens		*tokenize(char **split)
