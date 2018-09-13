@@ -6,7 +6,7 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/06 07:15:04 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/13 05:21:35 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/13 06:38:08 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ int				parse_arg_count(char *stream)
 				return (0);
 			}
 		}
-		else if (is_delim(stream[sp]))
+		else if (is_whitespace(stream[sp]))
 		{
-			sp = skip_delim(stream, sp);
+			sp = skip_whitespace(stream, sp);
 			if (!stream[sp])
 				return (count);
 		}
 		else
 		{
 			count += 1;
-			while (!is_delim(stream[sp]) && stream[sp])
+			while (!is_whitespace(stream[sp]) && stream[sp])
 			{
 				sp += 1;
 			}
@@ -154,42 +154,67 @@ char			**parse_strsplit(char *stream)
 	while (stream[sp] != '\0')
 	{
 		printf("sp = %d\n", sp);
-		if (is_quote(stream[sp]))
-		{
-			sp = dup_quote_contents(sp, stream, &split);
-		}
-		else if (is_redirection(stream[sp]))
-		{
-			sp = dup_redirection(sp, stream, &split);
-		}
-		else if (is_logical_operator(stream[sp], stream[sp + 1]))
-		{
-			sp = dup_logical_operator(sp, stream, &split);
-		}
-		else if (is_glob(stream, sp))
-		{
-			sp = dup_glob(sp, stream, &split);
-		}
-		else if (stream[sp] == ';')
-		{
-			sp = dup_seperator(sp, stream, &split);
-		}
-		else if (!is_delim(stream[sp]))
+		if (!is_whitespace(stream[sp]))
 		{
 			begin = sp;
-			while (!is_delim(stream[sp]) && stream[sp])
-				sp += 1;
-	
-			printf("sp = %d\n", sp);
-	
-			split.strings[split.ptr] = ft_strdup_range(stream, begin, sp - 1);
+			while (!is_whitespace(stream[sp]) && stream[sp])
+			{
+				if (is_quote(stream[sp]))
+				{
+					split.strings[split.ptr] = ft_strdup_range(stream, begin, sp - 1);
+					printf("string[%d] = %s\n", split.ptr, split.strings[split.ptr]);
+					split.ptr += 1;
+					sp = dup_quote_contents(sp, stream, &split);
+					begin = sp;
+				}
+				else if (is_redirection(stream[sp]))
+				{
+					split.strings[split.ptr] = ft_strdup_range(stream, begin, sp - 1);
+					printf("string[%d] = %s\n", split.ptr, split.strings[split.ptr]);
+					split.ptr += 1;
+					sp = dup_redirection(sp, stream, &split);
+					begin = sp;
+				}
+				else if (is_logical_operator(stream[sp], stream[sp + 1]))
+				{
 
-			printf("string[%d] = %s\n", split.ptr, split.strings[split.ptr]);
-	
-			split.ptr += 1;
+					split.strings[split.ptr] = ft_strdup_range(stream, begin, sp - 1);
+					printf("string[%d] = %s\n", split.ptr, split.strings[split.ptr]);
+					split.ptr += 1;
+					sp = dup_logical_operator(sp, stream, &split);
+					begin = sp;
+				}
+				else if (is_glob(stream, sp))
+				{
+					split.strings[split.ptr] = ft_strdup_range(stream, begin, sp - 1);
+					printf("string[%d] = %s\n", split.ptr, split.strings[split.ptr]);
+					split.ptr += 1;
+					sp = dup_glob(sp, stream, &split);
+					begin = sp;
+				}
+				else if (stream[sp] == ';')
+				{
+					split.strings[split.ptr] = ft_strdup_range(stream, begin, sp - 1);
+					printf("string[%d] = %s\n", split.ptr, split.strings[split.ptr]);
+					split.ptr += 1;
+					sp = dup_seperator(sp, stream, &split);
+					begin = sp;
+				}
+				else
+				{
+					sp += 1;
+				}
+				printf("sp = %d\n", sp);
+			}
+			if (!is_whitespace(stream[begin]))
+			{
+				split.strings[split.ptr] = ft_strdup_range(stream, begin, sp - 1);
+				printf("string[%d] = %s\n", split.ptr, split.strings[split.ptr]);
+				split.ptr += 1;
+			}
 		}
 		else
-			sp = skip_delim(stream, sp);
+			sp = skip_whitespace(stream, sp);
 	}
 	split.strings[split.ptr] = NULL;
 	return (split.strings);

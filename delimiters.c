@@ -6,13 +6,13 @@
 /*   By: dmendelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/08 07:45:05 by dmendelo          #+#    #+#             */
-/*   Updated: 2018/09/13 05:53:44 by dmendelo         ###   ########.fr       */
+/*   Updated: 2018/09/13 06:38:13 by dmendelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
-int				is_delim(char c)
+int				is_whitespace(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\n')
 	{
@@ -86,9 +86,9 @@ int				is_end_bracket(char c)
 	return (0);
 }
 
-int				skip_delim(char *stream, int stream_ptr)
+int				skip_whitespace(char *stream, int stream_ptr)
 {
-	while (is_delim(stream[stream_ptr]) && stream[stream_ptr])
+	while (is_whitespace(stream[stream_ptr]) && stream[stream_ptr])
 	{
 		stream_ptr += 1;
 	}
